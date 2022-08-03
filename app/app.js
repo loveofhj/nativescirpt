@@ -1,7 +1,12 @@
 import Vue from 'nativescript-vue'
 
-import Home from './components/Home'
+import tabview from './components/TabView'
 
-new Vue({
-  render: (h) => h('frame', [h(Home)]),
+import store from './store/index'
+
+new Vue({  
+  store,
+  render: (h) => h(tabview),// h('frame', [h(tabview)]),
 }).$start()
+
+store.dispatch('db/init');
