@@ -7,6 +7,10 @@
             </StackLayout>
         </ActionBar>
         <TabView tabTextFontSize="5" androidTabsPosition="bottom" tabTextColor="#767A79" selectedTabTextColor="#004097" androidSelectedTabHighlightColor="#004097" @selectedIndexChanged="selectedIndexChanged">
+            
+            <TabViewItem title="대상자 정보" >
+                <volunteerView />
+            </TabViewItem>
            
             <TabViewItem title="사용자 정보" >
                 <userview />
@@ -28,6 +32,7 @@
 </template>
 
 <script>
+import volunteerView from "./VolunteerView.vue"
 import userview from "./userView.vue"
 import ble from "./Home.vue"
 import bpview from "./BPView.vue"
@@ -38,7 +43,8 @@ import appinfo from "./AppInfo.vue"
 
 
 export default {
-    components: {        
+    components: { 
+        volunteerView,       
         userview,
         ble,
         bpview,        

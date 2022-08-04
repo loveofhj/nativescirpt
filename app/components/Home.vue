@@ -34,6 +34,8 @@
 
 <script>
 
+  import bpview from './BPView.vue';
+
   import { Bluetooth } from "@nativescript-community/ble";    
   
 
@@ -78,7 +80,7 @@
       //   var newData = { 'logDate': getStrDate(), 'logValue': item}
       //   this.$store.dispatch( 'ble/addLog', JSON.parse(JSON.stringify(newData)) );
       // }, 
-     
+      
       clickedBtn1() {
 
         bluetooth.isBluetoothEnabled().then(
@@ -132,19 +134,26 @@
         });
 
       },
-      clickedListItem( event ){
+      clickedListItem: async function( event ){
 
         console.log(  JSON.parse(JSON.stringify(event.item)) );
         
-        this.onConnect(event.item);
+        await this.onConnect(event.item);
 
-        
+
+        this.$navigateTo( bpview, { 
+          frame: 'bpview', 
+          animated: true,
+          transition: {
+                    name: "slide",
+                    duration: 200,
+                    curve: "ease"
+                },
+          props:{item:event.item} 
+          });
         //this.$root.nativeView.showModal('bpview');
 
-        // this.$navigateTo( { 
-        //   frame: 'bpview', 
-        //   props:{item:event.item} 
-        //   });
+        
       },
       getNumberOfWeek() {
           const today = new Date();
@@ -296,7 +305,7 @@
                     //newDate = year + '-' + month + '-' + day + '-' + hours + ':' + minutes + ':' + seconds;     
                     newDate = this.getStrDate();
                     
-                    const newdata =  { 'bpDate':newDate, 'uuid':item.UUID , 'sysblm': sys, 'diablm': dia, 'pulseblm': pulse };
+                    const newdata =  { 'bpDate':newDate, 'uuid':item.UUID , 'sys': sys, 'dia': dia, 'pulse': pulse };
 
                     //this.bpmlist.push(newdata);
                      this.$store.dispatch( 'ble/addBPItem', JSON.parse(JSON.stringify(newdata)) );
@@ -314,6 +323,7 @@
             console.log("Periperhal disconnected with UUID: " + peripheral.UUID);            
           }
         });   
+       
       }    
     }
   };

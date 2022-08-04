@@ -7,8 +7,8 @@ const bleStore = {
     namespaced: true,
     state:{
         blelist : [] , 
-        bplist: [ { 'bpDate':'2022-07-10', 'uuid':"28:FF:B2:2C:84:E4", 'sysblm':'120', 'diablm':'70', 'pulseblm':'77' },
-                  { 'bpDate':'2022-07-09', 'uuid':"28:FF:B2:2C:84:E4", 'sysblm':'127', 'diablm':'72', 'pulseblm':'73' }, ],        
+        bplist: [ { 'bpDate':'2022-07-10', 'uuid':"28:FF:B2:2C:84:E4", 'sys':'120', 'dia':'70', 'pulse':'77' },
+                  { 'bpDate':'2022-07-09', 'uuid':"28:FF:B2:2C:84:E4", 'sys':'127', 'dia':'72', 'pulse':'73' }, ],        
         loglist: [],
         batterylist: []
     },

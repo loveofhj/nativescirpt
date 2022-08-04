@@ -12,6 +12,7 @@ Vue.use(Vuex);
 import ble from './module/ble'
 import tabview from './module/tabView'
 import db from './module/dbStore'
+import volunteer from './module/volunteeStore';
 
 
 
@@ -19,18 +20,13 @@ export default new Vuex.Store({
     modules:{
         ble: ble,   
         tabview: tabview,  
-        db: db,   
+        db: db, 
+        volunteer: volunteer, 
     },
-
-    // plugins: [
-    //     createPersistedState({
-    //         paths: ["db"],
-    //     }),
-    // ]
 
     plugins: [
         NSVuexPersistent({
-            paths: ["db"],
+            paths: ["db", "volunteer" ],
         }),
     ]
 
