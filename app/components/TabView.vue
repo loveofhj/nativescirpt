@@ -8,6 +8,10 @@
         </ActionBar>
         <TabView tabTextFontSize="5" androidTabsPosition="bottom" tabTextColor="#767A79" selectedTabTextColor="#004097" androidSelectedTabHighlightColor="#004097" @selectedIndexChanged="selectedIndexChanged">
             
+             <TabViewItem title="날씨 정보" >
+                <weatherView />
+            </TabViewItem>
+
             <TabViewItem title="대상자 정보" >
                 <volunteerView />
             </TabViewItem>
@@ -32,6 +36,7 @@
 </template>
 
 <script>
+import weatherView from "./weatherView.vue"
 import volunteerView from "./VolunteerView.vue"
 import userview from "./userView.vue"
 import ble from "./Home.vue"
@@ -44,6 +49,7 @@ import appinfo from "./AppInfo.vue"
 
 export default {
     components: { 
+        weatherView,
         volunteerView,       
         userview,
         ble,

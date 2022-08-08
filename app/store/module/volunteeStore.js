@@ -24,18 +24,15 @@ const volunteerStore = {
     },
     actions:{
         fetchVolunteers: function(context) {
-            console.log("fetchVolunteers start!");
             Http.request({
                     url: 'https://selectmeat.backendless.app/api/data/volunteer',
                     method: 'GET'
                 })
                 .then((HttpResponse) => {
-                    context.commit('setVolunteers', JSON.parse(JSON.stringify( HttpResponse.content))  );
-                    //console.log("fetchVolunteers: " + HttpResponse.content );
+                    context.commit('setVolunteers', JSON.parse(JSON.stringify( HttpResponse.content))  );            
                 },
                 err => {
-                    console.log(err);
-                    console.log("fetchVolunteers error!");
+                    console.log(err);                    
                 }
             )
         },
