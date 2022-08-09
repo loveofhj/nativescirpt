@@ -13,6 +13,7 @@ import ble from './module/ble'
 import tabview from './module/tabView'
 import db from './module/dbStore'
 import volunteer from './module/volunteeStore';
+import weather from './module/weatherStore';
 
 
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
         tabview: tabview,  
         db: db, 
         volunteer: volunteer, 
+        weather: weather,
     },
 
     plugins: [

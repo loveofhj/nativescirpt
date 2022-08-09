@@ -5,69 +5,54 @@
       <Label text="WeatherView"  horizontalAlignment="center" verticalAlignment="top" />                      
     </ActionBar>
     
-    <StackLayout padding="10">
+    <StackLayout padding="10">        
         <StackLayout orientation="horizontal" >
             <TextField hint="input a city name"  v-model="query" ></TextField>
             <button :enabled="!!query" text="Search" @tap="showWeather"/>            
         </StackLayout>   
-        <StackLayout> 
-            <StackLayout orientation="horizontal" >
-                <Label :text="day" class="date" />                
-                <Label :text="icon" class="icon" />                
-            </StackLayout> 
-            <StackLayout orientation="horizontal" >
-                <Label text="Latitude: " />
-                <Label :text="lat" />
-                <label text=" metric" />
-            </StackLayout> 
-            <StackLayout orientation="horizontal" >
-                <Label text="Longtitude: " />
-                <Label :text="lon" />
-                <label text=" metric" />
-            </StackLayout> 
-
-            <StackLayout orientation="horizontal" >
-                <Label text="Temp: " />
-                <Label :text="temp" />                  
-                <label text=" °C" />
-            </StackLayout> 
-
-            <StackLayout orientation="horizontal" >
-                <Label text="Weather Description: " />
-                <Label :text="weatherDescription" />                  
-            </StackLayout> 
-
-            <StackLayout orientation="horizontal" >
-                <Label text="Temp Min: " />
-                <Label :text="tempMin" />  
-                <label text=" °C" />   
-            </StackLayout> 
-
-            <StackLayout orientation="horizontal" >
-                <Label text="Temp Max: " />
-                <Label :text="tempMax" />  
-                <label text=" °C" />
-            </StackLayout> 
-
-            <StackLayout orientation="horizontal" >
-                <Label text="Humidity: " />
-                <Label :text="humidity" />  
-                <label text=" %" />
-            </StackLayout>        
-        </StackLayout> 
+        <ListView for="idx in this.$store.state.weather.weatherData" height="*">
+                <v-template>
+                   <GridLayout row="*" col="*" rows="*,*,*,*,*,*,*,*" cols="*,*,*" marginBottom="10">
+                        <Label row="0" col="0" :text="day" class="date" />                
+                        <Label row="0" col="1" :text="idx.icon" class="icon" />                
+                   
+                        <Label row="1" col="0" text="Latitude: " horizontalAlignment="left" verticalAlignment="center" />
+                        <Label row="1" col="1" :text="idx.lat" horizontalAlignment="center" verticalAlignment="center" />
+                        <label row="1" col="2" text=" metric"  horizontalAlignment="right" verticalAlignment="center"/>
+                    
+                        <Label row="2" col="0" text="Longtitude: " horizontalAlignment="left" verticalAlignment="center" />
+                        <Label row="2" col="1" :text="idx.lon" horizontalAlignment="center" verticalAlignment="center"/>
+                        <label row="2" col="2" text=" metric" horizontalAlignment="right" verticalAlignment="center"/>
+                    
+                        <Label row="3" col="0" text="Temp: " horizontalAlignment="left" verticalAlignment="center" />
+                        <Label row="3" col="1" :text="idx.temp" horizontalAlignment="center" verticalAlignment="center"/>                  
+                        <label row="3" col="2" text=" °C" horizontalAlignment="right" verticalAlignment="center" />
+                    
+                        <Label row="4" col="0" text="Weather Description: " horizontalAlignment="left" verticalAlignment="center"/>
+                        <Label row="4" col="1" :text="idx.weatherDescription" horizontalAlignment="right" verticalAlignment="center" />                  
+                    
+                        <Label row="5" col="0" text="Temp Min: " horizontalAlignment="left" verticalAlignment="center"/>
+                        <Label row="5" col="1" :text="idx.tempMin" horizontalAlignment="center" verticalAlignment="center"/>  
+                        <label row="5" col="2" text=" °C" horizontalAlignment="right" verticalAlignment="center"/>   
+                    
+                        <Label row="6" col="0" text="Temp Max: " horizontalAlignment="left" verticalAlignment="center" />
+                        <Label row="6" col="1" :text="idx.tempMax" horizontalAlignment="center" verticalAlignment="center"/>  
+                        <label row="6" col="2" text=" °C" horizontalAlignment="right" verticalAlignment="center" />
+                    
+                        <Label row="7" col="0" text="Humidity: " horizontalAlignment="left" verticalAlignment="center"/>
+                        <Label row="7" col="1" :text="idx.humidity" horizontalAlignment="center" verticalAlignment="center"/>  
+                        <label row="7" col="2" text=" %" horizontalAlignment="right" verticalAlignment="center" />
+                    </GridLayout>    
+                </v-template>
+        </ListView>
     </StackLayout>
   </Page>
 </frame>
 </template>
 
 <script>
-  import { Http } from '@nativescript/core'
-//   import axios from 'axios';
-//   axios.defaults.baseURL = 'https://api.openweathermap.org/data/2.5/';
-  const apikey = 'input your key';
-
-  import { getWeather, dailyForecast, showWeather, getLocation } from 'nativescript-weather-api';
- 
+  
+  
 // <!--degree symbol in UNICODE use-->
 // &deg; or &#176;
 export const WEATHER_ICONS = {
@@ -109,30 +94,18 @@ export function getIcons(icon_names) {
     };
   });
   return icons;
-}
+};
 
   export default{    
     data(){
       return {
-        query: '',
-        error: false,
-        lat: null,
-        lon: null,
-        city: '',
-        country: '',
-        weatherDescription: '',
-        temp: null,
-        tempMin: null,
-        tempMax: null,
-        humidity: null,
-        icon: null,
         day:null,
 
-
       };      
-    },  
-    methods:{
-        getStrDate(){            
+    }, 
+    
+    methods:{        
+        showWeather: function() {
             var today = new Date();                
             var year = today.getFullYear();
             var month =('0' + (today.getMonth() + 1)).slice(-2);
@@ -149,91 +122,20 @@ export function getIcons(icon_names) {
             data[3] = hours;
             data[4] = minutes;
             data[5] = seconds;        
-            var date = (data[0] + ". " + data[1] + ". " + data[2] + ". ") ;
-            
-            return date.toString();
-        },    
+            var date = (data[0] + ". " + data[1] + ". " + data[2] + ". " + data[3] + "h") ;
 
-        showWeather: async function(){
-            console.log(this.query);              
-
-            await getLocation().then((location) => {
-
-                getWeather({
-
-                    key: apikey,
-                    lat: location.latitude,
-                    lon: location.longitude,
-                    unit: "metric"
-
-                }).then(() => {
-                    
-                    this.day = this.getStrDate();
-                    this.lat = location.latitude;
-                    this.lon = location.longitude
-
-                    var data = new showWeather();
-                    
-                    this.wind = data.wind;
-                    //this.city = data.country;
-                    this.country = data.country;
-                    this.weatherDescription = data.description;
-                    this.temp = data.temp;
-                    this.tempMin = data.temp_min;
-                    this.tempMax = data.temp_max;
-                    this.humidity = data.humidity;
-                    this.pressure = data.pressure;
-                    this.icon =  String.fromCharCode(data.icon);
-
-                });
-
-            });
-
-            // Open Weather API 유효기간 만료
-            // let link = `https://api.openweathermap.org/data/2.5/weather?q=${this.query}&appid=${apikey}`;
-            // console.log(link);
-            // await Http.request({
-            //         url: 'https://api.openweathermap.org/data/2.5/weather?q=${this.query}&appid=${apikey}',
-            //         method: 'GET'
-            //     })
-            //     .then((response) => {
-            //         console.log(response);  
-                    
-            //         this.city = response.data.name;
-            //         this.country = response.data.country;
-            //         this.weatherDescription = response.data.weather[0].description;  
-            //         this.temp = response.data.main.temp;
-            //         this.tempMin = response.data.main.temp_min;
-            //         this.tempMax = response.data.main.temp_max;
-            //         this.humidity = response.data.main.humidity;
-            //         this.error = false;
-            //     },
-            //     err => {
-            //         console.log(err);     
-            //         this.error = ture;               
-            //     }
-            // );
-
-
-
-            // axios.get( 'weather?q=${this.query}&appid=${apikey}', ).then( response => {
-            //   this.city = response.data.name;
-            //   this.country = response.data.country;
-            //   this.weatherDescription = response.data.weather[0].description;  
-            //   this.temp = response.data.main.temp;
-            //   this.tempMin = response.data.main.temp_min;
-            //   this.tempMax = response.data.main.temp_max;
-            //   this.humidity = response.data.main.humidity;
-            //   this.error = false;
-            // })
-            // .catch(()=>{
-            //     this.error = true;
-            //     this.city='';
-            // });
+            this.day = date.toString();
+            this.$store.dispatch('weather/showWeather', day);
+            console.log("clicked Weather Search!");
         },
+      
     }
+
+    
   
   };
+
+  
 </script>
 
 
