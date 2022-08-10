@@ -6,15 +6,17 @@
     </ActionBar>
     
     <StackLayout padding="10">        
-        <StackLayout orientation="horizontal" >
-            <TextField hint="input a city name"  v-model="query" ></TextField>
-            <button :enabled="!!query" text="Search" @tap="showWeather"/>            
+        <StackLayout >
+            <!-- <TextField hint="input a city name"  v-model="query" ></TextField> -->
+            <button text="Search" @tap="showWeather" width="*" />            
         </StackLayout>   
-        <ListView for="idx in this.$store.state.weather.weatherData" height="*">
+        <Label text="날씨 정보" class="date" />      
+        <ListView for="idx in this.$store.state.weather.weatherData" >
                 <v-template>
                    <GridLayout row="*" col="*" rows="*,*,*,*,*,*,*,*" cols="*,*,*" marginBottom="10">
-                        <Label row="0" col="0" :text="day" class="date" />                
-                        <Label row="0" col="1" :text="idx.icon" class="icon" />                
+                        <Label row="0" col="0" text="Date: "  horizontalAlignment="left" verticalAlignment="center" />                
+                        <Label row="0" col="1" :text="day"  horizontalAlignment="center" verticalAlignment="center" />                
+                        <Label row="0" col="2" :text="idx.icon" horizontalAlignment="right" verticalAlignment="center" />                
                    
                         <Label row="1" col="0" text="Latitude: " horizontalAlignment="left" verticalAlignment="center" />
                         <Label row="1" col="1" :text="idx.lat" horizontalAlignment="center" verticalAlignment="center" />
@@ -44,7 +46,30 @@
                         <label row="7" col="2" text=" %" horizontalAlignment="right" verticalAlignment="center" />
                     </GridLayout>    
                 </v-template>
-        </ListView>
+        </ListView>    
+        <Label text="미세먼지 정보" class="date" />                
+        <ListView for="idx in this.$store.state.weather.airData" height="*" >
+          <v-template>      
+            <GridLayout row="*" col="*" rows="*,*,*,*,*" cols="*,*" class="item" marginBottom="10">
+              <Label row="0" col="0" text="districName:"  horizontalAlignment="left" verticalAlignment="center" />
+              <Label row="0" col="1" :text="idx.districtName"  horizontalAlignment="right" verticalAlignment="center" />              
+
+              <Label row="1" col="0" text="일자:" horizontalAlignment="left" verticalAlignment="center" />
+              <Label row="1" col="1" :text="idx.issueDate" horizontalAlignment="right" verticalAlignment="center"  />
+
+              <Label row="2" col="0" text="itemCode:" horizontalAlignment="left" verticalAlignment="center" />
+              <Label row="2" col="1" :text="idx.itemCode" horizontalAlignment="right" verticalAlignment="center"  />
+
+              <Label row="3" col="0" text="경보단계:" horizontalAlignment="left" verticalAlignment="center" />
+              <Label row="3" col="1" :text="idx.issueGbn" horizontalAlignment="right" verticalAlignment="center"  />
+
+              <Label row="4" col="0" text="농도:" horizontalAlignment="left" verticalAlignment="center" />
+              <Label row="4" col="1" :text="idx.issueVal" horizontalAlignment="right" verticalAlignment="center"  />
+
+            </GridLayout>   
+          </v-template>
+        </ListView>   
+       
     </StackLayout>
   </Page>
 </frame>
@@ -125,7 +150,8 @@ export function getIcons(icon_names) {
             var date = (data[0] + ". " + data[1] + ". " + data[2] + ". " + data[3] + "h") ;
 
             this.day = date.toString();
-            this.$store.dispatch('weather/showWeather', day);
+            this.$store.dispatch('weather/fetchWeather', day);
+            this.$store.dispatch('weather/fetchAir', day);
             console.log("clicked Weather Search!");
         },
       
